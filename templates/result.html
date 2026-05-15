@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result | AgriShield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-microscope"></i> Diagnosis Report</h1>
+        <p>Comprehensive inspection completed successfully</p>
+    </header>
+
+    <main>
+        <div class="card result-card">
+            <div class="diagnosis-grid">
+                <!-- Column 1: Original Image -->
+                <div class="diagnosis-col">
+                    <h4 class="col-label">Original Leaf</h4>
+                    <div class="img-wrapper">
+                        <img src="{{ url_for('uploaded_file', filename=filename) }}" class="result-image" alt="Original">
+                    </div>
+                </div>
+
+                <!-- Column 2: Heatmap -->
+                <div class="diagnosis-col">
+                    <h4 class="col-label">AI Focus Area</h4>
+                    <div class="img-wrapper">
+                        {% if heatmap %}
+                        <img src="{{ url_for('heatmap_file', filename=heatmap) }}" class="result-image" alt="Heatmap">
+                        {% else %}
+                        <div class="no-data">Heatmap processing...</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Column 3: Stats & Treatment -->
+                <div class="diagnosis-col stats-col">
+                    <h4 class="col-label">Diagnosis Report</h4>
+                    
+                    <div class="stats-box">
+                        <div class="stat-item">
+                            <span class="label">Condition</span>
+                            <span class="value badge-disease">{{ disease }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">AI Confidence</span>
+                            <span class="value">{{ confidence }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Infection Level</span>
+                            <span class="value severity-tag">{{ severity }}</span>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-box single-line">
+                        <h4><i class="fas fa-stethoscope"></i> AI Suggestion</h4>
+                        <p>{{ recommendation }}</p>
+                    </div>
+
+                    {% if surveyed_solution %}
+                    <div class="recommendation-box single-line" style="margin-top: 1rem; background-color: #f0fdf4; border-left: 4px solid #22c55e;">
+                        <h4 style="color: #166534;"><i class="fas fa-clipboard-check"></i> Surveyed Best Practice</h4>
+                        <p style="white-space: pre-line; line-height: 1.6;">{{ surveyed_solution }}</p>
+                    </div>
+                    {% endif %}
+
+
+
+                    <div class="action-footer">
+                        <a href="/" class="btn scan-btn">New Scan</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AgriShield AI. Built for Sustainable Agriculture.</p>
+    </footer>
+
+</body>
+</html>
