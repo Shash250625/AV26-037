@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriShield | AI Crop Disease Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Analysis Splash Screen -->
+    <div id="analysis-splash" class="splash-overlay">
+        <div class="scanner-box">
+            <img id="splash-preview" src="#" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.3;">
+        </div>
+        <div class="splash-text">
+            <h2>AI DEEP INSPECTION</h2>
+            <p>Analyzing leaf morphology & cellular health...</p>
+        </div>
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="status-log" class="status-log">
+            Initializing neural network...
+        </div>
+    </div>
+
+    <header>
+        <h1><i class="fas fa-leaf"></i> AgriShield</h1>
+        <p>Advanced Lightweight AI for Accurate Crop Disease Diagnosis</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Scan Your Crop</h2>
+            <p style="color: #666; margin-bottom: 2rem; text-align: center;">Upload a clear photo of the infected leaf for an instant AI diagnosis and treatment plan.</p>
+            
+            <form action="/predict" method="post" enctype="multipart/form-data" id="upload-form">
+                <input type="file" id="file-upload" name="file" accept="image/*" required>
+                <label for="file-upload" class="upload-zone" id="drop-zone" style="position: relative;">
+                    <div id="preview-container" style="display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; border-radius: 20px; overflow: hidden;">
+                        <img id="image-preview" src="#" alt="Preview">
+                    </div>
+                    <div id="upload-prompt" style="z-index: 10; text-align: center;">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--primary-green); margin-bottom: 1.5rem;"></i>
+                        <span id="file-name" style="font-weight: 600; font-size: 1.1rem;">Click or Drag & Drop Leaf Image Here</span>
+                        <span style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">Supports JPG, JPEG, PNG</span>
+                    </div>
+                </label>
+                
+                <div class="loading" id="loader">
+                    <div class="loading-spinner"></div>
+                    <p>Analyzing health metrics...</p>
+                </div>
+
+
+
+                <button type="submit" class="btn" id="submit-btn">Detect Disease</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AgriShield AI. Built for Sustainable Agriculture.</p>
+    </footer>
+
+    <script>
+        const fileInput = document.getElementById('file-upload');
+        const fileName = document.getElementById('file-name');
+        const form = document.getElementById('upload-form');
+        const loader = document.getElementById('loader');
+        const submitBtn = document.getElementById('submit-btn');
+        const previewContainer = document.getElementById('preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const splashPreview = document.getElementById('splash-preview');
+        const uploadPrompt = document.getElementById('upload-prompt');
+        const splash = document.getElementById('analysis-splash');
+        const progressBar = document.getElementById('progress-bar');
+        const statusLog = document.getElementById('status-log');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = file.name;
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    splashPreview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    uploadPrompt.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const logs = [
+            "Segmenting leaf boundaries...",
+            "Analyzing HSV color distribution...",
+            "Running MobileNetV2 inference...",
+            "Calculating infection severity...",
+            "Generating Grad-CAM heatmap...",
+            "Finalizing diagnosis report..."
+        ];
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Wait for animation
+            
+            splash.style.display = 'flex';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 100);
+
+            // Rotate logs over 5 seconds
+            logs.forEach((log, i) => {
+                setTimeout(() => {
+                    statusLog.textContent = log;
+                }, (i + 1) * 800);
+            });
+
+            // Submit after 5 seconds
+            setTimeout(() => {
+                form.submit();
+            }, 5000);
+        });
+
+
+    </script>
+</body>
+</html>
